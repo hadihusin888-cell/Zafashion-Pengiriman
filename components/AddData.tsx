@@ -204,13 +204,13 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const labelClass = "text-sm font-semibold text-gray-600 mb-1.5 block";
 
   return (
-    <div className="max-w-5xl mx-auto pb-12">
+    <div className="max-w-5xl mx-auto pb-20 md:pb-12">
       
       {/* AI Toggle */}
       <div className="mb-6 flex justify-end">
           <button 
             onClick={() => setShowAi(!showAi)}
-            className="text-sm text-primary font-bold hover:text-indigo-700 flex items-center gap-2 transition-colors bg-blue-50 px-4 py-2 rounded-full"
+            className="w-full md:w-auto text-sm text-primary font-bold hover:text-indigo-700 flex items-center justify-center gap-2 transition-colors bg-blue-50 px-4 py-3 md:py-2 rounded-xl md:rounded-full border border-blue-100 shadow-sm"
           >
               <i className="fa-solid fa-wand-magic-sparkles"></i>
               {showAi ? 'Tutup AI Magic Paste' : 'AI Magic Paste (Isi Otomatis)'}
@@ -218,22 +218,22 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       </div>
 
       {showAi && (
-        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 rounded-xl shadow-lg text-white mb-6 animate-fade-in">
+        <div className="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 md:p-6 rounded-xl shadow-lg text-white mb-6 animate-fade-in">
             <h3 className="font-bold mb-2 flex items-center gap-2">
                 <i className="fa-solid fa-robot"></i> Paste Alamat Disini
             </h3>
-            <p className="text-blue-100 text-sm mb-3">Copy alamat dari WhatsApp atau Marketplace, lalu paste di sini. AI akan mendeteksi banyak barang sekaligus.</p>
+            <p className="text-blue-100 text-sm mb-3">Copy alamat dari WhatsApp atau Marketplace, lalu paste di sini.</p>
             <div className="flex flex-col md:flex-row gap-3">
             <textarea
                 value={rawText}
                 onChange={(e) => setRawText(e.target.value)}
-                placeholder="Contoh: Penerima: Budi, HP: 081... Jl Merdeka. Pesanan: 2 Kemeja Hitam, 1 Celana Jeans."
-                className="flex-1 p-3 rounded-lg text-gray-800 h-24 text-sm focus:ring-2 focus:ring-white/50 border-none"
+                placeholder="Contoh: Penerima: Budi, HP: 081... Jl Merdeka. Pesanan: 2 Kemeja Hitam."
+                className="flex-1 p-3 rounded-lg text-gray-800 h-32 md:h-24 text-sm focus:ring-2 focus:ring-white/50 border-none resize-none"
             />
             <button
                 onClick={handleAIParse}
                 disabled={isParsing}
-                className="bg-white text-primary px-8 py-3 rounded-lg font-bold hover:bg-gray-50 transition-colors self-end md:self-auto h-full"
+                className="bg-white text-primary px-6 py-3 rounded-lg font-bold hover:bg-gray-50 transition-colors self-stretch md:self-auto flex items-center justify-center min-w-[120px]"
             >
                 {isParsing ? <i className="fa-solid fa-spinner fa-spin"></i> : 'Proses AI'}
             </button>
@@ -245,7 +245,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         
         {/* Date Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="p-6">
+            <div className="p-4 md:p-6">
                 <label className={labelClass}>Tanggal Input</label>
                 <input 
                     type="date" 
@@ -258,7 +258,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
         {/* Sender Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="bg-blue-50/80 px-6 py-4 border-b border-blue-100">
+            <div className="bg-blue-50/80 px-4 md:px-6 py-4 border-b border-blue-100">
                 <h3 className="text-primary font-bold text-lg flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center shadow-sm text-sm">
                         <i className="fa-solid fa-user"></i>
@@ -266,7 +266,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                     Data Pengirim
                 </h3>
             </div>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label className={labelClass}>Nama Pengirim</label>
                     <input 
@@ -281,7 +281,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                 <div>
                     <label className={labelClass}>No. Telepon</label>
                     <input 
-                        type="text" 
+                        type="tel" 
                         required
                         value={formData.senderPhone}
                         onChange={(e) => setFormData({...formData, senderPhone: e.target.value})}
@@ -294,7 +294,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
         {/* Recipient Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="bg-blue-50/80 px-6 py-4 border-b border-blue-100">
+            <div className="bg-blue-50/80 px-4 md:px-6 py-4 border-b border-blue-100">
                 <h3 className="text-primary font-bold text-lg flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center shadow-sm text-sm">
                         <i className="fa-solid fa-location-dot"></i>
@@ -302,7 +302,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                     Alamat Tujuan
                 </h3>
             </div>
-            <div className="p-6 space-y-6">
+            <div className="p-4 md:p-6 space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <label className={labelClass}>Nama Penerima</label>
@@ -318,7 +318,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                     <div>
                         <label className={labelClass}>No. Telepon</label>
                         <input 
-                            type="text" 
+                            type="tel" 
                             required
                             value={formData.phoneNumber}
                             onChange={(e) => setFormData({...formData, phoneNumber: e.target.value})}
@@ -344,7 +344,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                 <div className="relative" ref={districtInputRef}>
                     <label className={labelClass}>
                         Kecamatan 
-                        <span className="text-xs font-normal text-gray-400 ml-1">(Ketik min 3 huruf untuk cari)</span>
+                        <span className="text-xs font-normal text-gray-400 ml-1">(Ketik min 3 huruf)</span>
                     </label>
                     <div className="relative">
                         <input 
@@ -419,7 +419,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
         {/* Courier Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="bg-blue-50/80 px-6 py-4 border-b border-blue-100">
+            <div className="bg-blue-50/80 px-4 md:px-6 py-4 border-b border-blue-100">
                 <h3 className="text-primary font-bold text-lg flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center shadow-sm text-sm">
                         <i className="fa-solid fa-truck"></i>
@@ -427,7 +427,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                     Jasa Pengiriman
                 </h3>
             </div>
-            <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="p-4 md:p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <label className={labelClass}>Pilih Jasa Kirim</label>
                     <select
@@ -459,22 +459,35 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
         {/* Items Section (Dynamic Rows) */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <div className="bg-blue-50/80 px-6 py-4 border-b border-blue-100 flex justify-between items-center">
+            <div className="bg-blue-50/80 px-4 md:px-6 py-4 border-b border-blue-100 flex flex-col sm:flex-row justify-between sm:items-center gap-2">
                 <h3 className="text-primary font-bold text-lg flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-white text-primary flex items-center justify-center shadow-sm text-sm">
                         <i className="fa-solid fa-box"></i>
                     </div>
                     Detail Barang
                 </h3>
-                <span className="text-sm font-bold text-gray-600 bg-white px-3 py-1 rounded-lg border border-gray-200">
-                    Total Nilai: Rp {calculateTotalValue().toLocaleString('id-ID')}
+                <span className="text-sm font-bold text-gray-600 bg-white px-3 py-1 rounded-lg border border-gray-200 self-start sm:self-auto">
+                    Total: Rp {calculateTotalValue().toLocaleString('id-ID')}
                 </span>
             </div>
             
-            <div className="p-6 space-y-4">
+            <div className="p-4 md:p-6 space-y-4">
                 <div className="flex flex-col gap-3">
                     {items.map((item, index) => (
-                        <div key={index} className="flex flex-col md:flex-row gap-3 items-end md:items-center bg-gray-50 p-3 rounded-lg border border-gray-200">
+                        <div key={index} className="relative flex flex-col md:flex-row gap-3 md:items-center bg-gray-50 p-4 md:p-3 rounded-lg border border-gray-200">
+                            
+                            {/* Delete Button Mobile Position */}
+                            {items.length > 1 && (
+                                <button
+                                    type="button"
+                                    onClick={() => removeItemRow(index)}
+                                    className="absolute top-2 right-2 md:hidden bg-red-100 text-red-600 w-8 h-8 rounded-lg flex items-center justify-center"
+                                    title="Hapus Baris"
+                                >
+                                    <i className="fa-solid fa-trash text-xs"></i>
+                                </button>
+                            )}
+
                             <div className="flex-grow w-full md:w-auto">
                                 <label className="text-xs font-bold text-gray-500 mb-1 block">Nama Barang</label>
                                 <input 
@@ -485,31 +498,33 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                                     placeholder="Contoh: Kemeja Polos"
                                 />
                             </div>
-                            <div className="w-full md:w-20">
-                                <label className="text-xs font-bold text-gray-500 mb-1 block">Qty</label>
-                                <input 
-                                    type="number" 
-                                    value={item.qty}
-                                    onChange={(e) => handleItemChange(index, 'qty', e.target.value)}
-                                    className={`${inputClass} py-2`}
-                                    placeholder="1"
-                                />
-                            </div>
-                            <div className="w-full md:w-36">
-                                <label className="text-xs font-bold text-gray-500 mb-1 block">Harga (Rp)</label>
-                                <input 
-                                    type="number" 
-                                    value={item.value || ''}
-                                    onChange={(e) => handleItemChange(index, 'value', parseFloat(e.target.value) || 0)}
-                                    className={`${inputClass} py-2`}
-                                    placeholder="0"
-                                />
+                            <div className="flex gap-3">
+                                <div className="w-1/3 md:w-20">
+                                    <label className="text-xs font-bold text-gray-500 mb-1 block">Qty</label>
+                                    <input 
+                                        type="number" 
+                                        value={item.qty}
+                                        onChange={(e) => handleItemChange(index, 'qty', e.target.value)}
+                                        className={`${inputClass} py-2`}
+                                        placeholder="1"
+                                    />
+                                </div>
+                                <div className="w-2/3 md:w-36">
+                                    <label className="text-xs font-bold text-gray-500 mb-1 block">Harga (Rp)</label>
+                                    <input 
+                                        type="number" 
+                                        value={item.value || ''}
+                                        onChange={(e) => handleItemChange(index, 'value', parseFloat(e.target.value) || 0)}
+                                        className={`${inputClass} py-2`}
+                                        placeholder="0"
+                                    />
+                                </div>
                             </div>
                             {items.length > 1 && (
                                 <button
                                     type="button"
                                     onClick={() => removeItemRow(index)}
-                                    className="bg-red-100 text-red-600 w-10 h-10 rounded-lg hover:bg-red-200 flex items-center justify-center transition-colors mb-0.5"
+                                    className="hidden md:flex bg-red-100 text-red-600 w-10 h-10 rounded-lg hover:bg-red-200 items-center justify-center transition-colors mb-0.5"
                                     title="Hapus Baris"
                                 >
                                     <i className="fa-solid fa-trash"></i>
@@ -519,11 +534,11 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
                     ))}
                 </div>
 
-                <div className="flex justify-between items-center pt-2">
+                <div className="pt-2">
                      <button
                         type="button"
                         onClick={addItemRow}
-                        className="text-primary font-bold text-sm flex items-center gap-2 hover:bg-blue-50 px-3 py-2 rounded-lg transition-colors"
+                        className="w-full md:w-auto text-primary font-bold text-sm flex items-center justify-center gap-2 hover:bg-blue-50 px-4 py-3 rounded-lg border border-dashed border-primary/30 transition-colors"
                      >
                          <i className="fa-solid fa-plus-circle"></i> Tambah Barang Lain
                      </button>
@@ -545,18 +560,18 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
         </div>
 
         {/* Footer Buttons */}
-        <div className="flex justify-end gap-3 pt-4 pb-12">
+        <div className="flex flex-col-reverse sm:flex-row justify-end gap-3 pt-4 pb-12">
              <button
               type="button"
               onClick={handleReset}
-              className="px-6 py-3 rounded-xl border border-gray-300 text-gray-600 font-bold hover:bg-gray-50 transition-colors flex items-center gap-2"
+              className="w-full sm:w-auto px-6 py-3 rounded-xl border border-gray-300 text-gray-600 font-bold hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
             >
               <i className="fa-solid fa-rotate-left"></i> Reset
             </button>
             <button
               type="submit"
               disabled={isSaving}
-              className="bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-primary/30 transform hover:scale-[1.02] transition-all flex items-center gap-2"
+              className="w-full sm:w-auto bg-primary text-white px-8 py-3 rounded-xl font-bold hover:bg-indigo-700 shadow-lg shadow-primary/30 transform hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
             >
               <i className="fa-solid fa-save"></i> {isSaving ? 'Menyimpan...' : 'Simpan Data'}
             </button>
