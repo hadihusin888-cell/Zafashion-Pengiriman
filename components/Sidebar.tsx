@@ -35,8 +35,24 @@ const Sidebar: React.FC<SidebarProps> = ({ currentTab, setTab }) => {
           </button>
         ))}
       </nav>
-      <div className="p-4 border-t text-xs text-gray-400 text-center">
-        v1.0.0 &copy; 2024
+      
+      {/* Settings */}
+      <div className="p-4 border-t space-y-2">
+          <button
+            onClick={() => setTab('settings')}
+            className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
+              currentTab === 'settings'
+                ? 'bg-gray-800 text-white'
+                : 'text-gray-600 hover:bg-gray-100'
+            }`}
+          >
+            <i className="fa-solid fa-gear w-6"></i>
+            <span className="font-medium">Pengaturan</span>
+          </button>
+      </div>
+
+      <div className="p-4 text-xs text-gray-400 text-center">
+        v2.1.0 (Google Sheets / Local)
       </div>
     </div>
   );

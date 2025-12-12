@@ -7,8 +7,8 @@ import { PackageItem } from '../types';
 const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     date: new Date().toISOString().split('T')[0],
-    senderName: 'Za_Fashion', 
-    senderPhone: '085725675920',
+    senderName: '', 
+    senderPhone: '',
     recipientName: '',
     phoneNumber: '',
     address: '',
@@ -78,8 +78,8 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
       }
 
       setShowAi(false);
-    } catch (error) {
-      alert('Gagal memproses alamat dengan AI.');
+    } catch (error: any) {
+      alert(error.message || 'Gagal memproses alamat dengan AI.');
     } finally {
       setIsParsing(false);
     }
@@ -158,7 +158,7 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
 
       alert('Data berhasil disimpan!');
       
-      // Reset Form
+      // Reset Form (keep sender info for convenience)
       setFormData(prev => ({
         ...prev,
         recipientName: '',
@@ -184,8 +184,8 @@ const AddData: React.FC<{ onSuccess: () => void }> = ({ onSuccess }) => {
   const handleReset = () => {
       setFormData({
         date: new Date().toISOString().split('T')[0],
-        senderName: 'Za_Fashion',
-        senderPhone: '085725675920',
+        senderName: '',
+        senderPhone: '',
         recipientName: '',
         phoneNumber: '',
         address: '',

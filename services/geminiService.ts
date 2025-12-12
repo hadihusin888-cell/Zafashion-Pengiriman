@@ -1,16 +1,8 @@
 import { GoogleGenAI, Type } from "@google/genai";
 
-const getClient = () => {
-    const apiKey = process.env.API_KEY;
-    if (!apiKey) {
-        throw new Error("API Key not found");
-    }
-    return new GoogleGenAI({ apiKey });
-};
-
 export const parseAddressWithAI = async (rawText: string): Promise<any> => {
   try {
-    const ai = getClient();
+    const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const response = await ai.models.generateContent({
       model: 'gemini-2.5-flash',
@@ -56,7 +48,7 @@ export const parseAddressWithAI = async (rawText: string): Promise<any> => {
     });
 
     return JSON.parse(response.text || "{}");
-  } catch (error) {
+  } catch (error: any) {
     console.error("Gemini AI Parsing Error:", error);
     throw error;
   }
