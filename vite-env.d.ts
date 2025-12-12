@@ -1,9 +1,11 @@
-// /// <reference types="vite/client" />
+/// <reference types="vite/client" />
 
-// Declare process to prevent errors in services using process.env, 
-// and comment out vite/client reference if the types are missing in the environment.
-declare const process: {
-  env: {
+// Fix: Augment NodeJS.ProcessEnv to include API_KEY.
+// We do not declare 'process' here because it is already declared (likely by @types/node),
+// causing a redeclaration error.
+declare namespace NodeJS {
+  interface ProcessEnv {
+    API_KEY: string;
     [key: string]: string | undefined;
-  };
-};
+  }
+}
