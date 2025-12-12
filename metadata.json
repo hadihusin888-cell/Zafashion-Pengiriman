@@ -1,0 +1,5 @@
+{
+  "name": "Za Fashion Solo",
+  "description": "Aplikasi manajemen alamat pengiriman paket dengan fitur AI parsing dan pencetakan label.",
+  "requestFramePermissions": []
+}
