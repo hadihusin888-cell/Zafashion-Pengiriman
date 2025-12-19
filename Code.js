@@ -1,11 +1,17 @@
-// --- GOOGLE APPS SCRIPT CODE ---
-// 1. Create a Google Sheet.
-// 2. Open Extensions > Apps Script.
-// 3. Paste this code.
-// 4. Deploy > New Deployment > Web App.
-// 5. Execute as: Me.
-// 6. Who has access: Anyone.
-// 7. Copy the URL and paste it into the App Settings.
+
+/**
+ * GOOGLE APPS SCRIPT - BACKEND ZA FASHION SOLO
+ * 
+ * CARA PENGGUNAAN:
+ * 1. Buka Google Sheet baru.
+ * 2. Klik Extensions > Apps Script.
+ * 3. Hapus semua kode yang ada dan paste kode ini.
+ * 4. Klik ikon Save (Beri nama: "Backend-Shipping").
+ * 5. Klik "Deploy" > "New Deployment".
+ * 6. Select type: "Web App".
+ * 7. Execute as: "Me" | Who has access: "Anyone".
+ * 8. Klik Deploy, lalu salin "Web App URL" ke menu Pengaturan di aplikasi.
+ */
 
 function doGet(e) {
   return handleRequest(e);
@@ -16,101 +22,129 @@ function doPost(e) {
 }
 
 function handleRequest(e) {
-  // CORS support
   const lock = LockService.getScriptLock();
-  lock.tryLock(10000);
+  lock.tryLock(15000); // Tunggu maksimal 15 detik jika ada antrean data
 
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
     let sheet = ss.getSheetByName('Packages');
+    
+    // Auto-create sheet jika belum ada
     if (!sheet) {
       sheet = ss.insertSheet('Packages');
-      // Headers
       sheet.appendRow([
         'ID', 'CreatedAt', 'Status', 'Recipient', 'Phone', 'Address', 
         'District', 'City', 'Province', 'Zip', 'Courier', 'Resi', 
         'Sender', 'SenderPhone', 'Items', 'Note', 'Value'
       ]);
+      sheet.getRange(1, 1, 1, 17).setFontWeight('bold').setBackground('#f3f3f3');
+      sheet.setFrozenRows(1);
     }
 
-    const action = e.parameter.action || (e.postData ? JSON.parse(e.postData.contents).action : '');
+    let action = '';
+    let payload = {};
+
+    if (e.postData) {
+      payload = JSON.parse(e.postData.contents);
+      action = payload.action;
+    } else {
+      action = e.parameter.action;
+    }
     
+    // --- AKSI: BACA DATA (READ) ---
     if (action === 'read') {
       const rows = sheet.getDataRange().getValues();
-      const headers = rows[0];
       const data = rows.slice(1).map(row => {
         let items = [];
-        try { items = JSON.parse(row[14]); } catch(e) {}
+        try { 
+          // Parsing kembali string JSON barang menjadi array object
+          items = typeof row[14] === 'string' ? JSON.parse(row[14]) : row[14]; 
+        } catch(err) { items = []; }
         
         return {
-          id: row[0],
+          id: String(row[0]),
           createdAt: row[1],
           status: row[2],
           recipientName: row[3],
-          phoneNumber: row[4],
+          phoneNumber: String(row[4]),
           address: row[5],
           district: row[6],
           city: row[7],
           province: row[8],
-          zipCode: row[9],
+          zipCode: String(row[9]),
           courier: row[10],
-          shippingCode: row[11],
+          shippingCode: String(row[11]),
           senderName: row[12],
-          senderPhone: row[13],
+          senderPhone: String(row[13]),
           items: items,
           note: row[15],
-          itemValue: row[16]
+          itemValue: String(row[16])
         };
       });
       return response({ status: 'success', data: data });
     }
 
-    const payload = e.postData ? JSON.parse(e.postData.contents) : {};
-
+    // --- AKSI: BUAT DATA BARU (CREATE) ---
     if (action === 'create') {
       const p = payload.data;
       const itemsJson = JSON.stringify(p.items || []);
       sheet.appendRow([
         p.id, p.createdAt, p.status, p.recipientName, p.phoneNumber,
         p.address, p.district, p.city, p.province, p.zipCode,
-        p.courier, p.shippingCode, p.senderName, p.senderPhone,
-        itemsJson, p.note, p.itemValue
+        p.courier, p.shippingCode || '', p.senderName, p.senderPhone,
+        itemsJson, p.note || '', p.itemValue || '0'
       ]);
       return response({ status: 'success' });
     }
 
+    // --- AKSI: UPDATE STATUS (MASSAL) ---
     if (action === 'updateStatus') {
       const ids = payload.ids || [];
       const status = payload.status;
       const data = sheet.getDataRange().getValues();
       
       for (let i = 1; i < data.length; i++) {
-        if (ids.includes(data[i][0])) { // ID is col 0
-           sheet.getRange(i + 1, 3).setValue(status); // Status is col 2 (C)
+        if (ids.indexOf(String(data[i][0])) !== -1) {
+           sheet.getRange(i + 1, 3).setValue(status);
         }
       }
       return response({ status: 'success' });
     }
     
+    // --- AKSI: UPDATE DETAIL (EDIT) ---
     if (action === 'updateDetails') {
        const id = payload.id;
-       const updates = payload.updates;
+       const u = payload.updates;
        const data = sheet.getDataRange().getValues();
+       
        for(let i=1; i<data.length; i++) {
-           if(data[i][0] === id) {
-               if(updates.shippingCode) sheet.getRange(i+1, 12).setValue(updates.shippingCode);
-               if(updates.status) sheet.getRange(i+1, 3).setValue(updates.status);
-               // Add other fields as needed
+           if(String(data[i][0]) === String(id)) {
+               const row = i + 1;
+               if (u.recipientName) sheet.getRange(row, 4).setValue(u.recipientName);
+               if (u.phoneNumber) sheet.getRange(row, 5).setValue(u.phoneNumber);
+               if (u.address) sheet.getRange(row, 6).setValue(u.address);
+               if (u.district) sheet.getRange(row, 7).setValue(u.district);
+               if (u.city) sheet.getRange(row, 8).setValue(u.city);
+               if (u.province) sheet.getRange(row, 9).setValue(u.province);
+               if (u.zipCode) sheet.getRange(row, 10).setValue(u.zipCode);
+               if (u.courier) sheet.getRange(row, 11).setValue(u.courier);
+               if (u.shippingCode !== undefined) sheet.getRange(row, 12).setValue(u.shippingCode);
+               if (u.status) sheet.getRange(row, 3).setValue(u.status);
+               if (u.note !== undefined) sheet.getRange(row, 16).setValue(u.note);
+               if (u.items) sheet.getRange(row, 15).setValue(JSON.stringify(u.items));
+               if (u.itemValue) sheet.getRange(row, 17).setValue(u.itemValue);
+               break;
            }
        }
        return response({ status: 'success' });
     }
 
+    // --- AKSI: HAPUS (DELETE) ---
     if (action === 'delete') {
       const id = payload.id;
       const data = sheet.getDataRange().getValues();
       for (let i = 1; i < data.length; i++) {
-        if (data[i][0] === id) {
+        if (String(data[i][0]) === String(id)) {
           sheet.deleteRow(i + 1);
           break;
         }

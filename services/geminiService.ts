@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Type } from "@google/genai";
 
 export const parseAddressWithAI = async (rawText: string): Promise<any> => {
@@ -5,7 +6,7 @@ export const parseAddressWithAI = async (rawText: string): Promise<any> => {
     const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
     
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: `Extract shipping details from the text. 
       If the text contains "Dari:" or "Pengirim:", extract that as sender info. 
       Otherwise, assume the main info is the Recipient.
