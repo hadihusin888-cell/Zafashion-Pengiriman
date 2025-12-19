@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Dashboard from './components/Dashboard';
 import AddData from './components/AddData';
@@ -9,13 +10,12 @@ import Settings from './components/Settings';
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSheetConnected, setIsSheetConnected] = useState(false);
 
-  // Hardcoded user profile since we removed Auth
-  const user = {
-    displayName: 'Admin Toko',
-    email: 'admin@toko.com',
-    photoURL: null
-  };
+  useEffect(() => {
+    const url = localStorage.getItem('za_fashion_script_url');
+    setIsSheetConnected(!!url);
+  }, [activeTab]);
 
   const renderContent = () => {
     switch (activeTab) {
@@ -35,7 +35,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-gray-50">
+    <div className="flex min-h-screen bg-[#F8FAFC]">
       <Sidebar 
         currentTab={activeTab} 
         setTab={setActiveTab} 
@@ -44,44 +44,54 @@ const App: React.FC = () => {
       />
       
       <main className="flex-1 md:ml-64 p-4 md:p-8 print:m-0 print:p-0 w-full transition-all">
-        <header className="mb-6 md:mb-8 flex justify-between items-center no-print bg-white p-4 md:p-0 rounded-xl md:rounded-none shadow-sm md:shadow-none border md:border-none border-gray-100">
-            <div className="flex items-center gap-3">
+        <header className="mb-6 md:mb-8 flex justify-between items-center no-print">
+            <div className="flex items-center gap-4">
                 <button 
                   onClick={() => setIsSidebarOpen(true)}
-                  className="md:hidden text-gray-500 hover:text-primary p-1"
+                  className="md:hidden bg-white w-10 h-10 rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600"
                 >
-                  <i className="fa-solid fa-bars text-xl"></i>
+                  <i className="fa-solid fa-bars"></i>
                 </button>
-                <div className="flex items-center gap-2 text-gray-400">
-                    <span className="hidden md:inline">Aplikasi</span>
-                    <i className="fa-solid fa-chevron-right text-xs hidden md:inline"></i>
-                    <span className="text-gray-800 font-bold md:font-medium capitalize text-lg md:text-base">{activeTab.replace('-', ' ')}</span>
+                <div>
+                    <h1 className="text-xl md:text-2xl font-black text-gray-900 capitalize tracking-tight">
+                        {activeTab.replace('-', ' ')}
+                    </h1>
+                    <div className="flex items-center gap-2 mt-0.5">
+                        <div className={`w-2 h-2 rounded-full ${isSheetConnected ? 'bg-green-500 animate-pulse' : 'bg-red-400'}`}></div>
+                        <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest">
+                            {isSheetConnected ? 'Cloud Synced' : 'Offline Mode'}
+                        </span>
+                    </div>
                 </div>
             </div>
             
             <div className="flex items-center gap-3">
                  <button 
                     onClick={() => setActiveTab('settings')}
-                    className="bg-white w-10 h-10 rounded-full shadow-sm flex items-center justify-center border text-gray-500 hover:text-primary transition-colors md:bg-white md:shadow-sm md:border hidden md:flex"
-                    title="Pengaturan"
+                    className="bg-white px-4 py-2 rounded-xl shadow-sm border border-gray-200 text-gray-500 hover:text-primary transition-all hidden md:flex items-center gap-2 font-bold text-sm"
                 >
                      <i className="fa-solid fa-gear"></i>
+                     Pengaturan
                 </button>
-                <div className="flex items-center gap-3 bg-white md:pl-2 md:pr-4 md:py-1 rounded-full md:shadow-sm md:border border-gray-100">
-                     <div className="bg-primary text-white w-8 h-8 rounded-full flex items-center justify-center font-bold">
-                       {user.displayName.charAt(0)}
+                <div className="flex items-center gap-3 bg-white p-1 pr-4 rounded-xl shadow-sm border border-gray-200">
+                     <div className="bg-gradient-to-br from-primary to-indigo-600 text-white w-9 h-9 rounded-lg flex items-center justify-center font-bold shadow-md shadow-indigo-100">
+                       A
                      </div>
-                     <span className="text-sm font-medium text-gray-700 hidden md:block">
-                       {user.displayName}
-                     </span>
+                     <div className="hidden sm:block">
+                        <p className="text-xs font-black text-gray-900 leading-none">Admin Toko</p>
+                        <p className="text-[10px] font-bold text-gray-400 uppercase tracking-tighter mt-1">Superuser</p>
+                     </div>
                 </div>
             </div>
         </header>
 
-        {renderContent()}
+        <div className="animate-fade-in">
+            {renderContent()}
+        </div>
       </main>
 
-      <div id="print-area"></div>
+      {/* Background Decor */}
+      <div className="fixed top-0 right-0 -z-10 w-1/2 h-1/2 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none"></div>
     </div>
   );
 };
