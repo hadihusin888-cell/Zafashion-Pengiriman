@@ -1,5 +1,5 @@
 
-import { GoogleGenAI, Type } from "@google/genai";
+import { GoogleGenAI, Type } from "@google/generative-ai";
 
 export const parseAddressWithAI = async (rawText: string): Promise<any> => {
   try {
