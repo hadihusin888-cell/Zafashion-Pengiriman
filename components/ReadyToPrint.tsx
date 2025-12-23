@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from 'react';
 import { PackageData, ShippingStatus } from '../types';
 import { shippingService } from '../services/shippingService';
@@ -257,20 +258,14 @@ const ReadyToPrint: React.FC = () => {
                              <div className="font-mono text-gray-600">{pkg.senderPhone}</div>
                         </div>
                         <div className="min-w-0 flex-1">
-                            {pkg.items && pkg.items.length > 1 ? (
-                                <div className="uppercase">
-                                    <span className="font-bold">Isi:</span>
-                                    <span className="ml-1 text-[9px] leading-tight block line-clamp-2">
-                                        {pkg.items.map(i => `${i.name} (${i.qty})`).join(', ')}
-                                    </span>
-                                </div>
-                            ) : (
-                                pkg.itemName && (
-                                    <div className="truncate uppercase">
-                                        <span className="font-bold">Isi:</span> {pkg.itemName} {pkg.itemQty && pkg.itemQty !== '1' && `(${pkg.itemQty})`}
-                                    </div>
-                                )
-                            )}
+                            <div className="uppercase">
+                                <span className="font-bold">Isi: </span>
+                                <span className="text-[9px] leading-tight line-clamp-2">
+                                    {pkg.items && pkg.items.length > 0 
+                                      ? pkg.items.map(i => `${i.name} (${i.qty})`).join(', ')
+                                      : pkg.itemName || '-'}
+                                </span>
+                            </div>
                             
                             {pkg.note && (
                                 <div className="italic text-gray-600 truncate uppercase mt-0.5">

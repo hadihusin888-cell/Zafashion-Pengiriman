@@ -1,5 +1,5 @@
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI, Type } from "@google/genai";
 
 export const parseAddressWithAI = async (rawText: string) => {
   const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
@@ -7,6 +7,9 @@ export const parseAddressWithAI = async (rawText: string) => {
   const response = await ai.models.generateContent({
     model: 'gemini-3-flash-preview',
     contents: `Parse the following Indonesian shipping address text into a structured JSON. 
+    Make sure to extract recipient name, phone, address, district, city, province, and zip code if available.
+    Also extract the item list (items) with names and quantities.
+    
     Text: "${rawText}"`,
     config: {
       responseMimeType: "application/json",
